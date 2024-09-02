@@ -10,16 +10,29 @@ app.listen(8000, function() {
    });
 
 let state = {
-    hungry : 5
+    hunger : 75,
+    sleep : 75,
+    mood : 75
 };
 
-app.get('/feed', function(request, response) {
-    state.hungry += 1;
+app.get('/hunger', function(request, response) {
+    state.hunger += 25;
+    state.sleep -= 25;
     response.setHeader('Content-Type', 'application/json'); 
     response.send(state);
    });
 
-app.get('/state', function(request, response) {
+app.get('/sleep', function(request, response) {
+    state.sleep += 25;
+    state.hunger -= 25;
+    response.setHeader('Content-Type', 'application/json'); 
+    response.send(state);
+   });
+
+app.get('/mood', function(request, response) {
+    state.mood += 25;
+    state.hunger -= 25;
+    state.sleep -= 25;
     response.setHeader('Content-Type', 'application/json'); 
     response.send(state);
    });
