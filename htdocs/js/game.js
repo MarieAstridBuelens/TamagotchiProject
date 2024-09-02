@@ -27,9 +27,22 @@ function create() {
     backImage.setScale(0.55);
     stateText = this.add.text(150, 80, "", 
         { fontFamily: 'Arial', fontSize: 18, color: '#00ff00' });
-    let buttonImage = this.add.image(100, 100, 'button').setInteractive();
-    buttonImage.setScale(0.3);
-    buttonImage.on('pointerdown', feed);
+
+    let buttonImageHunger = this.add.image(100, 100, 'button').setInteractive();
+    buttonImageHunger.setScale(0.3);
+    buttonImageHunger.on('pointerdown', feed);
+    setInterval(updateState, 10000);
+
+    let buttonImageSleep = this.add.image(250, 100, 'button').setInteractive();
+    buttonImageSleep.setScale(0.3);
+    buttonImageSleep.tint = 0x1673F8;
+    buttonImageSleep.on('pointerdown', sleep);
+    setInterval(updateState, 10000);
+
+    let buttonImagePlay = this.add.image(500, 100, 'button').setInteractive();
+    buttonImagePlay.setScale(0.3);
+    buttonImagePlay.tint = 0xffa500;
+    buttonImagePlay.on('pointerdown', play);
     setInterval(updateState, 10000);
 }
 
@@ -40,7 +53,7 @@ function updateState() {
         return response.json(); 
         }) 
             .then(function (stateFromServer) { 
-                stateText.text = stateFromServer.hunger; 
+                stateText.text = stateFromServer; 
             }) 
     .catch(function (err) { 
         console.log("Something went wrong!", err); 
@@ -54,7 +67,35 @@ function feed() {
         return response.json(); 
         }) 
             .then(function (stateFromServer) { 
-                stateText.text = state.hunger; 
+                stateText.text = stateFromServer.hunger; 
+            }) 
+    .catch(function (err) { 
+        console.log("Something went wrong!", err); 
+        });
+}
+
+function sleep() {
+    // envoyer la requête GET vers le serveur
+    fetch('http://localhost:8000/sleep') 
+    .then(function (response) { 
+        return response.json(); 
+        }) 
+            .then(function (stateFromServer) { 
+                stateText.text = stateFromServer.sleep; 
+            }) 
+    .catch(function (err) { 
+        console.log("Something went wrong!", err); 
+        });
+}
+
+function play() {
+    // envoyer la requête GET vers le serveur
+    fetch('http://localhost:8000/mood') 
+    .then(function (response) { 
+        return response.json(); 
+        }) 
+            .then(function (stateFromServer) { 
+                stateText.text = stateFromServer.mood; 
             }) 
     .catch(function (err) { 
         console.log("Something went wrong!", err); 
