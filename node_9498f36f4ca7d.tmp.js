@@ -44,8 +44,6 @@ app.get('/state', function(request, response) {
 
 function updateState() {
     state.mood -= 1;
-    state.hunger -= 1;
-    state.sleep -= 1;
 }
 
 setInterval(updateState, 10000);
