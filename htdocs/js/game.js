@@ -14,7 +14,9 @@ let config = {
 
 let game = new Phaser.Game(config);
 let state;
-let stateText;
+let stateTextHunger;
+let stateTextSleep;
+let stateTextPlay;
 
 function preload() {
     this.load.image('background', '/assets/Sprites/background.png');
@@ -25,24 +27,29 @@ function create() {
     let backImage = this.add.image(0, 0, 'background');
     backImage.setOrigin(0, 0);
     backImage.setScale(0.55);
-    stateText = this.add.text(150, 80, "", 
-        { fontFamily: 'Arial', fontSize: 18, color: '#00ff00' });
+    
 
-    let buttonImageHunger = this.add.image(100, 100, 'button').setInteractive();
+    let buttonImageHunger = this.add.image(117, 650, 'button').setInteractive();
     buttonImageHunger.setScale(0.3);
     buttonImageHunger.on('pointerdown', feed);
-    setInterval(updateState, 10000);
+    stateTextHunger = this.add.text(117, 600, "", 
+        { fontFamily: 'Arial', fontSize: 18, color: '#00ff00' });
 
-    let buttonImageSleep = this.add.image(250, 100, 'button').setInteractive();
+    let buttonImageSleep = this.add.image(350, 650, 'button').setInteractive();
     buttonImageSleep.setScale(0.3);
     buttonImageSleep.tint = 0x1673F8;
     buttonImageSleep.on('pointerdown', sleep);
-    setInterval(updateState, 10000);
+    stateTextSleep = this.add.text(350, 600, "", 
+        { fontFamily: 'Arial', fontSize: 18, color: '#00ff00' });
 
-    let buttonImagePlay = this.add.image(500, 100, 'button').setInteractive();
+    let buttonImagePlay = this.add.image(580, 650, 'button').setInteractive();
     buttonImagePlay.setScale(0.3);
     buttonImagePlay.tint = 0xffa500;
     buttonImagePlay.on('pointerdown', play);
+
+    stateTextPlay = this.add.text(580, 600, "", 
+        { fontFamily: 'Arial', fontSize: 18, color: '#00ff00' });
+    
     setInterval(updateState, 10000);
 }
 
@@ -67,7 +74,9 @@ function feed() {
         return response.json(); 
         }) 
             .then(function (stateFromServer) { 
-                stateText.text = stateFromServer.hunger; 
+                stateTextHunger.text = "Hunger : " + stateFromServer.hunger;
+                stateTextSleep.text = "Sleep : " + stateFromServer.sleep;
+                stateTextPlay.text = "Mood : " + stateFromServer.mood;
             }) 
     .catch(function (err) { 
         console.log("Something went wrong!", err); 
@@ -81,7 +90,9 @@ function sleep() {
         return response.json(); 
         }) 
             .then(function (stateFromServer) { 
-                stateText.text = stateFromServer.sleep; 
+                stateTextHunger.text = "Hunger : " + stateFromServer.hunger;
+                stateTextSleep.text = "Sleep : " + stateFromServer.sleep;
+                stateTextPlay.text = "Mood : " + stateFromServer.mood; 
             }) 
     .catch(function (err) { 
         console.log("Something went wrong!", err); 
@@ -95,7 +106,9 @@ function play() {
         return response.json(); 
         }) 
             .then(function (stateFromServer) { 
-                stateText.text = stateFromServer.mood; 
+                stateTextHunger.text = "Hunger : " + stateFromServer.hunger;
+                stateTextSleep.text = "Sleep : " + stateFromServer.sleep;
+                stateTextPlay.text = "Mood : " + stateFromServer.mood; 
             }) 
     .catch(function (err) { 
         console.log("Something went wrong!", err); 
