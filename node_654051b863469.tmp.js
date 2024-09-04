@@ -13,6 +13,7 @@ let state = {
     hunger : 75,
     sleep : 75,
     mood : 75,
+    death : false
 };
 
 app.get('/hunger', function(request, response) {
@@ -43,9 +44,19 @@ app.get('/state', function(request, response) {
    });
 
 function updateState() {
-    state.mood -= 25;
-    state.hunger -= 25;
-    state.sleep -= 25;
+    
+    if ((state.mood > 0 && state.hunger > 0)|| (state.mood > 0 && state.sleep > 0) || (state.hungry > 0 && state.sleep > 0)){
+        death = false;
+        state.mood -= 25;
+        state.hunger -= 25;
+        state.sleep -= 25;
+    }
+    else{
+        death = true;
+    }
+    
 }
+
+
 
 setInterval(updateState, 10000);

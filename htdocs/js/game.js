@@ -73,9 +73,7 @@ function updateState() {
         return response.json(); 
         }) 
             .then(function (stateFromServer) { 
-                stateTextHunger.text = "Hunger : " + stateFromServer.hunger;
-                stateTextSleep.text = "Sleep : " + stateFromServer.sleep;
-                stateTextPlay.text = "Mood : " + stateFromServer.mood;
+                updateCerberiusStats(stateFromServer);
             }) 
     .catch(function (err) { 
         console.log("Something went wrong!", err); 
@@ -83,17 +81,15 @@ function updateState() {
 }
 
 function feed() {
-    counterManager();
-
+    counterManager();   
     // envoyer la requête GET vers le serveur
     fetch('http://localhost:8000/hunger') 
     .then(function (response) { 
         return response.json(); 
         }) 
             .then(function (stateFromServer) {
-                stateTextHunger.text = "Hunger : " + stateFromServer.hunger;
-                stateTextSleep.text = "Sleep : " + stateFromServer.sleep;
-                stateTextPlay.text = "Mood : " + stateFromServer.mood;             
+                updateCerberiusStats(stateFromServer);
+                   
             }) 
     .catch(function (err) { 
         console.log("Something went wrong!", err); 
@@ -109,10 +105,8 @@ function sleep() {
         return response.json(); 
         }) 
             .then(function (stateFromServer) {
+                updateCerberiusStats(stateFromServer);
                 
-                stateTextHunger.text = "Hunger : " + stateFromServer.hunger;
-                stateTextSleep.text = "Sleep : " + stateFromServer.sleep;
-                stateTextPlay.text = "Mood : " + stateFromServer.mood;
             }) 
     .catch(function (err) { 
         console.log("Something went wrong!", err); 
@@ -120,21 +114,16 @@ function sleep() {
 }
 
 function play() {
-    counterManager()
-
+    
+    counterManager();
     // envoyer la requête GET vers le serveur
     fetch('http://localhost:8000/mood') 
     .then(function (response) { 
         return response.json(); 
         }) 
             .then(function (stateFromServer) {
-                if(counter <= 0){
-                    buttonImagePlay.disableInteractive();
-                    buttonImagePlay.setAlpha(0.5);
-                }
-                stateTextHunger.text = "Hunger : " + stateFromServer.hunger;
-                stateTextSleep.text = "Sleep : " + stateFromServer.sleep;
-                stateTextPlay.text = "Mood : " + stateFromServer.mood;
+                updateCerberiusStats(stateFromServer);
+                
             }) 
     .catch(function (err) { 
         console.log("Something went wrong!", err); 
@@ -152,16 +141,34 @@ function counterManager(){
         buttonImagePlay.disableInteractive();
         buttonImagePlay.setAlpha(0.5);
         setTimeout(resetCounter, timeToWait);
+        
     }
 }
 
-function resetCounter(){
-    clickCounter = 0;
-    stateTextCounter.text = "Counter : " + clickCounter;
-    buttonImageHunger.setInteractive();
-    buttonImageHunger.setAlpha(1);
-    buttonImageSleep.setInteractive();
-    buttonImageSleep.setAlpha(1);
-    buttonImagePlay.setInteractive();
-    buttonImagePlay.setAlpha(1);
+function resetCounter(stateFromServer){
+    if (stateFromServer.death == false){
+        clickCounter = 0;
+        stateTextCounter.text = "Counter : " + clickCounter;
+        buttonImageHunger.setInteractive();
+        buttonImageHunger.setAlpha(1);
+        buttonImageSleep.setInteractive();
+        buttonImageSleep.setAlpha(1);
+        buttonImagePlay.setInteractive();
+        buttonImagePlay.setAlpha(1);   
+    }
+}
+
+function updateCerberiusStats(stateFromServer){    
+    stateTextHunger.text = "Hunger : " + stateFromServer.hunger;
+    stateTextSleep.text = "Sleep : " + stateFromServer.sleep;
+    stateTextPlay.text = "Mood : " + stateFromServer.mood;
+    if (death == true){
+        //change asset Cerberius
+        buttonImageHunger.disableInteractive();
+        buttonImageHunger.setAlpha(0.5);
+        buttonImageSleep.disableInteractive();
+        buttonImageSleep.setAlpha(0.5);
+        buttonImagePlay.disableInteractive();
+        buttonImagePlay.setAlpha(0.5);
+    }  
 }
