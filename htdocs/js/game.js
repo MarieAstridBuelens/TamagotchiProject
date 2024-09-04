@@ -47,7 +47,7 @@ function create() {
     deathImage = this.add.image(0, 0, 'death');
     deathImage.setOrigin(0, 0);
     deathImage.setScale(0.9);
-    deathImage.setAlpha(0);
+    deathImage.alpha = 0;
     
     buttonStart = this.add.image(350, 350, 'button').setInteractive();
     buttonStart.on('pointerdown', startGame);
@@ -201,5 +201,6 @@ function updateCerberiusStats(stateFromServer){
         buttonImageSleep.setAlpha(0.5);
         buttonImagePlay.disableInteractive();
         buttonImagePlay.setAlpha(0.5);
-    }  
+        deathImage.alpha=1;
+    }
 }
