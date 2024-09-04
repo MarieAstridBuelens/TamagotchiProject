@@ -1,7 +1,7 @@
 let config = {
     type: Phaser.AUTO,
     width: 700,
-    height: 700,
+    height: 721,
     physics: {
         default: 'arcade'
     },
@@ -30,12 +30,17 @@ let buttonImagePlay;
 let timeToWait=5000;
 let backgroundMusic;
 let musicOn = false;
+let CerberiusImage;
+let CerberiusImageHunger;
+let CerberiusImageSleep;
+let CerberiusImagePlay;
 
 
 function preload() {
     this.load.image('background', '/assets/Sprites/background2.jpg');
     this.load.image('death', '/assets/Sprites/deathTemp.jpg');
     this.load.image('button', '/assets/Sprites/block.png');
+    this.load.image('eat', '/assets/Sprites/eat.png');
     this.load.audio('backgroundMusic', '/assets/Sound/Alexander Ehlers - Flags.mp3')
 }
 
@@ -84,6 +89,10 @@ function create() {
 
     backgroundMusic = this.sound.add('backgroundMusic');
     backgroundMusic.loop = true;
+
+    CerberiusImageHunger = this.add.image(350, 350, 'eat');
+    CerberiusImageHunger.setOrigin(0.5, 0.5);
+    CerberiusImageHunger.alpha = 0;
     
 }
 
@@ -112,7 +121,8 @@ function updateState() {
 }
 
 function feed() {
-    counterManager();   
+    counterManager();
+    CerberiusImageHunger.alpha = 1;
     // envoyer la requête GET vers le serveur
     fetch('http://localhost:8000/hunger') 
     .then(function (response) { 
