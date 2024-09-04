@@ -38,9 +38,12 @@ let CerberiusImagePlay;
 
 function preload() {
     this.load.image('background', '/assets/Sprites/background2.jpg');
-    this.load.image('death', '/assets/Sprites/deathTemp.jpg');
+    this.load.image('death', '/assets/Sprites/dead.png');
     this.load.image('button', '/assets/Sprites/block.png');
     this.load.image('eat', '/assets/Sprites/eat.png');
+    this.load.image('beast', '/assets/Sprites/beast.png');
+    this.load.image('play', '/assets/Sprites/play.png');
+    this.load.image('sleep', '/assets/Sprites/sleep.png');
     this.load.audio('backgroundMusic', '/assets/Sound/Alexander Ehlers - Flags.mp3')
 }
 
@@ -49,9 +52,24 @@ function create() {
     backImage.setOrigin(0, 0);
     backImage.setScale(0.9);
 
-    deathImage = this.add.image(0, 0, 'death');
-    deathImage.setOrigin(0, 0);
-    deathImage.setScale(0.9);
+    CerberiusImage = this.add.image(350, 350, 'beast');
+    CerberiusImage.setScale(0.65);
+    CerberiusImage.alpha = 0;
+    
+    CerberiusImageHunger = this.add.image(350, 350, 'eat');
+    CerberiusImageHunger.setScale(0.65);
+    CerberiusImageHunger.alpha = 0;
+
+    CerberiusImagePlay = this.add.image(350, 350, 'play');
+    CerberiusImagePlay.setScale(0.65);
+    CerberiusImagePlay.alpha = 0;
+
+    CerberiusImageSleep = this.add.image(350, 350, 'sleep');
+    CerberiusImageSleep.setScale(0.65);
+    CerberiusImageSleep.alpha = 0;
+
+    deathImage = this.add.image(350, 350, 'death');
+    deathImage.setScale(0.65);
     deathImage.alpha = 0;
     
     buttonStart = this.add.image(350, 350, 'button').setInteractive();
@@ -89,15 +107,12 @@ function create() {
 
     backgroundMusic = this.sound.add('backgroundMusic');
     backgroundMusic.loop = true;
-
-    CerberiusImageHunger = this.add.image(350, 350, 'eat');
-    CerberiusImageHunger.setOrigin(0.5, 0.5);
-    CerberiusImageHunger.alpha = 0;
     
 }
 
 function startGame(){
     buttonStart.setAlpha(0);
+    CerberiusImage.alpha = 1;
     backgroundMusic.play();
     musicOn = true;
 }
@@ -122,7 +137,10 @@ function updateState() {
 
 function feed() {
     counterManager();
+    CerberiusImage.alpha = 0;
     CerberiusImageHunger.alpha = 1;
+    CerberiusImagePlay.alpha = 0;
+    CerberiusImageSleep.alpha = 0;
     // envoyer la requête GET vers le serveur
     fetch('http://localhost:8000/hunger') 
     .then(function (response) { 
@@ -139,7 +157,10 @@ function feed() {
 
 function sleep() {
     counterManager();
-
+    CerberiusImageSleep.alpha = 1;
+    CerberiusImage.alpha = 0;
+    CerberiusImageHunger.alpha = 0;
+    CerberiusImagePlay.alpha = 0;
     // envoyer la requête GET vers le serveur
     fetch('http://localhost:8000/sleep') 
     .then(function (response) { 
@@ -157,6 +178,10 @@ function sleep() {
 function play() {
     
     counterManager();
+    CerberiusImage.alpha = 0;
+    CerberiusImageHunger.alpha = 0;
+    CerberiusImagePlay.alpha = 1;
+    CerberiusImageSleep.alpha = 0;
     // envoyer la requête GET vers le serveur
     fetch('http://localhost:8000/mood') 
     .then(function (response) { 
@@ -196,6 +221,10 @@ function resetCounter(){
         buttonImageSleep.setAlpha(1);
         buttonImagePlay.setInteractive();
         buttonImagePlay.setAlpha(1);
+        CerberiusImage.alpha = 0;
+        CerberiusImageHunger.alpha = 0;
+        CerberiusImagePlay.alpha = 0;
+        CerberiusImageSleep.alpha = 0;
     }
 }
 
@@ -211,6 +240,10 @@ function updateCerberiusStats(stateFromServer){
         buttonImageSleep.setAlpha(0.5);
         buttonImagePlay.disableInteractive();
         buttonImagePlay.setAlpha(0.5);
-        deathImage.alpha=1;
+        deathImage.alpha = 1;
+        CerberiusImage.alpha = 0;
+        CerberiusImageHunger.alpha = 0;
+        CerberiusImagePlay.alpha = 0;
+        CerberiusImageSleep.alpha = 0;
     }
 }
