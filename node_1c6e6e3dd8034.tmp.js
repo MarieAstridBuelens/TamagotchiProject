@@ -13,6 +13,8 @@ let state = {
     hunger : 75,
     sleep : 75,
     mood : 75,
+    counter : 3
+    
 };
 
 app.get('/hunger', function(request, response) {
