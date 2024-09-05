@@ -27,12 +27,16 @@ let buttonStart;
 let buttonImageHunger;
 let buttonImageSleep;
 let buttonImagePlay;
-let timeToWait=5000;
+
+let timeToWait3Actions=5000;
+let timeToWaitSpriteChange=3000;
+
 let backgroundMusic;
 let eatSound;
 let playSound;
 let sleepSound;
 let musicOn = false;
+
 let CerberiusImage;
 let CerberiusImageHunger;
 let CerberiusImageSleep;
@@ -119,35 +123,94 @@ function create() {
     buttonStart = this.add.image(350, 350, 'button').setInteractive();
     buttonStart.on('pointerdown', startGame);
 
-    buttonImageHunger = this.add.image(117, 650, 'button').setInteractive();
-    buttonImageHunger.setScale(0.3);
+    buttonImageHunger = this.add.image(110, 615, 'buttonEat').setInteractive();
+    buttonImageHunger.setScale(0.4);
     buttonImageHunger.on('pointerdown', feed);
 
-    stateTextHunger = this.add.text(117, 600, "", 
-        { fontFamily: 'Arial', fontSize: 18, color: '#00ff00' });
+    stateTextHunger = this.add.text(117, 550, "", 
+        { fontFamily: 'Arial', fontSize: 18, color: '#ece2ad' });
 
-    buttonImageSleep = this.add.image(360, 650, 'button').setInteractive();
-    buttonImageSleep.setScale(0.3);
-    buttonImageSleep.tint = 0x1673F8;
+    buttonImageSleep = this.add.image(355, 630, 'buttonSleep').setInteractive();
+    buttonImageSleep.setScale(0.4);
     buttonImageSleep.on('pointerdown', sleep);
    
-    stateTextSleep = this.add.text(350, 600, "", 
-        { fontFamily: 'Arial', fontSize: 18, color: '#00ff00' });
+    stateTextSleep = this.add.text(350, 550, "", 
+        { fontFamily: 'Arial', fontSize: 18, color: '#ece2ad' });
 
-    buttonImagePlay = this.add.image(600, 650, 'button').setInteractive();
-    buttonImagePlay.setScale(0.3);
-    buttonImagePlay.tint = 0xffa500;
+    buttonImagePlay = this.add.image(605, 615, 'buttonPlay').setInteractive();
+    buttonImagePlay.setScale(0.4);
     buttonImagePlay.on('pointerdown', play);
 
-    stateTextPlay = this.add.text(580, 600, "", 
-        { fontFamily: 'Arial', fontSize: 18, color: '#00ff00' });
+    stateTextPlay = this.add.text(580, 550, "", 
+        { fontFamily: 'Arial', fontSize: 18, color: '#ece2ad' });
     
     stateTextCounter = this.add.text(100, 100, "", 
-        { fontFamily: 'Arial', fontSize: 18, color: '#00ff00' });
+        { fontFamily: 'Arial', fontSize: 18, color: '#ece2ad' });
     
-    updateState();
-    setInterval(updateState, 10000);
-    clickCounter = 0;
+    // 75% bar
+    EatBarImage75= this.add.image(140, 50, 'EatBar3');
+    EatBarImage75.setScale(0.6);
+    EatBarImage75.alpha=1;
+
+    SleepBarImage75= this.add.image(350, 50, 'SleepBar3');
+    SleepBarImage75.setScale(0.6);
+    SleepBarImage75.alpha=1;
+
+    PlayBarImage75= this.add.image(560, 50, 'PlayBar3');
+    PlayBarImage75.setScale(0.6);
+    PlayBarImage75.alpha=1;
+
+    // 0% bar
+    EatBarImage0= this.add.image(140, 50, 'emptyBar');
+    EatBarImage0.setScale(0.6);
+    EatBarImage0.alpha=0;
+    
+    SleepBarImage0= this.add.image(350, 50, 'emptyBar');
+    SleepBarImage0.setScale(0.6);
+    SleepBarImage0.alpha=0;
+
+    PlayBarImage0= this.add.image(560, 50, 'emptyBar');
+    PlayBarImage0.setScale(0.6);
+    PlayBarImage0.alpha=0;
+
+    // 25% bar
+    EatBarImage25= this.add.image(140, 50, 'EatBar1');
+    EatBarImage25.setScale(0.6);
+    EatBarImage25.alpha=0;
+    
+    SleepBarImage25= this.add.image(350, 50, 'SleepBar1');
+    SleepBarImage25.setScale(0.6);
+    SleepBarImage25.alpha=0;
+
+    PlayBarImage25= this.add.image(560, 50, 'PlayBar1');
+    PlayBarImage25.setScale(0.6);
+    PlayBarImage25.alpha=0;
+
+    // 50% bar
+    EatBarImage50= this.add.image(140, 50, 'EatBar2');
+    EatBarImage50.setScale(0.6);
+    EatBarImage50.alpha=0;
+    
+    SleepBarImage50= this.add.image(350, 50, 'SleepBar2');
+    SleepBarImage50.setScale(0.6);
+    SleepBarImage50.alpha=0;
+
+    PlayBarImage50= this.add.image(560, 50, 'PlayBar2');
+    PlayBarImage50.setScale(0.6);
+    PlayBarImage50.alpha=0;
+    
+    // 100% bar
+    EatBarImage100= this.add.image(140, 50, 'EatBar4');
+    EatBarImage100.setScale(0.6);
+    EatBarImage100.alpha=0;
+    
+    SleepBarImage100= this.add.image(350, 50, 'SleepBar4');
+    SleepBarImage100.setScale(0.6);
+    SleepBarImage100.alpha=0;
+
+    PlayBarImage100= this.add.image(560, 50, 'PlayBar4');
+    PlayBarImage100.setScale(0.6);
+    PlayBarImage100.alpha=0;
 
     backgroundMusic = this.sound.add('backgroundMusic');
     backgroundMusic.loop = true;
@@ -155,12 +218,15 @@ function create() {
     eatSound = this.sound.add('beastEat');
     playSound = this.sound.add('beastPlay');
     sleepSound = this.sound.add('beastSleep');
-    
+
+    updateState();
+    setInterval(updateState, 10000);
+    clickCounter = 0;
 }
 
 function startGame(){
-    buttonStart.setAlpha(0);
-    CerberiusImage.alpha = 1;
+    buttonStart.alpha=0;
+    resetSprite();
     backgroundMusic.play();
     musicOn = true;
 }
@@ -257,7 +323,7 @@ function counterManager(){
         buttonImageSleep.setAlpha(0.5);
         buttonImagePlay.disableInteractive();
         buttonImagePlay.setAlpha(0.5);
-        setTimeout(resetCounter, timeToWait);
+        setTimeout(resetCounter, timeToWait3Actions);
         
     }
 }
@@ -267,15 +333,12 @@ function resetCounter(){
         clickCounter = 0;
         stateTextCounter.text = "Counter : " + clickCounter;
         buttonImageHunger.setInteractive();
-        buttonImageHunger.setAlpha(1);
+        buttonImageHunger.alpha = 1;
         buttonImageSleep.setInteractive();
-        buttonImageSleep.setAlpha(1);
+        buttonImageSleep.alpha = 1;
         buttonImagePlay.setInteractive();
-        buttonImagePlay.setAlpha(1);
-        CerberiusImage.alpha = 0;
-        CerberiusImageHunger.alpha = 0;
-        CerberiusImagePlay.alpha = 0;
-        CerberiusImageSleep.alpha = 0;
+        buttonImagePlay.alpha = 1;
+        resetSprite();
     }
 }
 
@@ -283,18 +346,156 @@ function updateCerberiusStats(stateFromServer){
     stateTextHunger.text = "Hunger : " + stateFromServer.hunger;
     stateTextSleep.text = "Sleep : " + stateFromServer.sleep;
     stateTextPlay.text = "Mood : " + stateFromServer.mood;
+
+    setTimeout(resetSprite, timeToWaitSpriteChange);
+    
+    //jauge 0%
+    if (stateFromServer.hunger<=0){
+        EatBarImage0.alpha=1;
+        EatBarImage25.alpha=0;
+        EatBarImage50.alpha=0;
+        EatBarImage75.alpha=0;
+        EatBarImage100.alpha=0;
+    }
+
+    if (stateFromServer.sleep<=0){
+        SleepBarImage0.alpha=1;
+        SleepBarImage25.alpha=0;
+        SleepBarImage50.alpha=0;
+        SleepBarImage75.alpha=0;
+        SleepBarImage100.alpha=0;
+    }
+
+    if (stateFromServer.mood<=0){
+        PlayBarImage0.alpha=1;
+        PlayBarImage25.alpha=0;
+        PlayBarImage50.alpha=0;
+        PlayBarImage75.alpha=0;
+        PlayBarImage100.alpha=0;
+    }
+    //jauge 25%
+    if (stateFromServer.hunger>0 && stateFromServer.hunger<=25 ){
+        EatBarImage25.alpha=1;
+        EatBarImage0.alpha=0;
+        EatBarImage50.alpha=0;
+        EatBarImage75.alpha=0;
+        EatBarImage100.alpha=0;
+    }
+
+    if (stateFromServer.sleep>0 && stateFromServer.sleep<=25 ){
+        SleepBarImage25.alpha=1;
+        SleepBarImage0.alpha=0;
+        SleepBarImage50.alpha=0;
+        SleepBarImage75.alpha=0;
+        SleepBarImage100.alpha=0;
+    }
+
+    if (stateFromServer.mood>0 && stateFromServer.mood<=25 ){
+        PlayBarImage25.alpha=1;
+        PlayBarImage0.alpha=0;
+        PlayBarImage50.alpha=0;
+        PlayBarImage75.alpha=0;
+        PlayBarImage100.alpha=0;
+    }
+
+    //jauge 50%
+    if (stateFromServer.hunger>25 && stateFromServer.hunger<=50){
+        EatBarImage0.alpha=0;
+        EatBarImage25.alpha=0;
+        EatBarImage50.alpha=1;
+        EatBarImage75.alpha=0;
+        EatBarImage100.alpha=0;
+    }
+
+    if (stateFromServer.sleep>25 && stateFromServer.sleep<=50){
+        SleepBarImage0.alpha=0;
+        SleepBarImage25.alpha=0;
+        SleepBarImage50.alpha=1;
+        SleepBarImage75.alpha=0;
+        SleepBarImage100.alpha=0;
+    }
+
+    if (stateFromServer.mood>25 && stateFromServer.mood<=50){
+        PlayBarImage0.alpha=0;
+        PlayBarImage25.alpha=0;
+        PlayBarImage50.alpha=1;
+        PlayBarImage75.alpha=0;
+        PlayBarImage100.alpha=0;
+    }
+
+    //jauge 75%
+    if (stateFromServer.hunger>50 && stateFromServer.hunger<=75){
+        EatBarImage0.alpha=0;
+        EatBarImage25.alpha=0;
+        EatBarImage50.alpha=0;
+        EatBarImage75.alpha=1;
+        EatBarImage100.alpha=0;
+    }
+
+    if (stateFromServer.sleep>50 && stateFromServer.sleep<=75){
+        SleepBarImage0.alpha=0;
+        SleepBarImage25.alpha=0;
+        SleepBarImage50.alpha=0;
+        SleepBarImage75.alpha=1;
+        SleepBarImage100.alpha=0;
+    }
+
+    if (stateFromServer.mood>50 && stateFromServer.mood<=75){
+        PlayBarImage0.alpha=0;
+        PlayBarImage25.alpha=0;
+        PlayBarImage50.alpha=0;
+        PlayBarImage75.alpha=1;
+        PlayBarImage100.alpha=0;
+    }
+
+    //jauge 100%
+    if (stateFromServer.hunger>75){
+        EatBarImage0.alpha=0;
+        EatBarImage25.alpha=0;
+        EatBarImage50.alpha=0;
+        EatBarImage75.alpha=0;
+        EatBarImage100.alpha=1;
+    }
+
+    if (stateFromServer.sleep>75){
+        SleepBarImage0.alpha=0;
+        SleepBarImage25.alpha=0;
+        SleepBarImage50.alpha=0;
+        SleepBarImage75.alpha=0;
+        SleepBarImage100.alpha=1;
+    }
+
+    if (stateFromServer.mood>75){
+        PlayBarImage0.alpha=0;
+        PlayBarImage25.alpha=0;
+        PlayBarImage50.alpha=0;
+        PlayBarImage75.alpha=0;
+        PlayBarImage100.alpha=1;
+    }
+
     if (stateFromServer.death == true){
         //change asset Cerberius
         buttonImageHunger.disableInteractive();
-        buttonImageHunger.setAlpha(0.5);
+        buttonImageHunger.alpha = 0.5;
         buttonImageSleep.disableInteractive();
-        buttonImageSleep.setAlpha(0.5);
+        buttonImageSleep.alpha = 0.5;
         buttonImagePlay.disableInteractive();
-        buttonImagePlay.setAlpha(0.5);
+        buttonImagePlay.alpha = 0.5;
         deathImage.alpha = 1;
         CerberiusImage.alpha = 0;
         CerberiusImageHunger.alpha = 0;
         CerberiusImagePlay.alpha = 0;
         CerberiusImageSleep.alpha = 0;
     }
+    
+}
+
+function resetSprite(){
+    if (deathImage.alpha == 0){
+        CerberiusImage.alpha = 1;
+        CerberiusImageHunger.alpha = 0;
+        CerberiusImagePlay.alpha = 0;
+        CerberiusImageSleep.alpha = 0;
+    }
+    
 }
