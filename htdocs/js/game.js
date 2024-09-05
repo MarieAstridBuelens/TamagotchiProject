@@ -35,16 +35,53 @@ let CerberiusImageHunger;
 let CerberiusImageSleep;
 let CerberiusImagePlay;
 
+let EatBarImage0;
+let EatBarImage25;
+let EatBarImage50;
+let EatBarImage75;
+let EatBarImage100;
+
+let SleepBarImage0;
+let SleepBarImage25;
+let SleepBarImage50;
+let SleepBarImage75;
+let SleepBarImage100;
+
+let PlayBarImage0;
+let PlayBarImage25;
+let PlayBarImage50;
+let PlayBarImage75;
+let PlayBarImage100;
+
 
 function preload() {
     this.load.image('background', '/assets/Sprites/background2.jpg');
     this.load.image('death', '/assets/Sprites/dead.png');
     this.load.image('button', '/assets/Sprites/block.png');
+    this.load.image('buttonEat', '/assets/Sprites/buttonEat.png');
+    this.load.image('buttonSleep', '/assets/Sprites/buttonSleep.png');
+    this.load.image('buttonPlay', '/assets/Sprites/buttonPlay.png');
     this.load.image('eat', '/assets/Sprites/eat.png');
     this.load.image('beast', '/assets/Sprites/beast.png');
     this.load.image('play', '/assets/Sprites/play.png');
     this.load.image('sleep', '/assets/Sprites/sleep.png');
     this.load.audio('backgroundMusic', '/assets/Sound/Alexander Ehlers - Flags.mp3')
+
+    this.load.image('emptyBar', '/assets/Sprites/emptyBar.png');
+    this.load.image('EatBar1', '/assets/Sprites/eatBar1.png');
+    this.load.image('EatBar2', '/assets/Sprites/eatBar2.png');
+    this.load.image('EatBar3', '/assets/Sprites/eatBar3.png');
+    this.load.image('EatBar4', '/assets/Sprites/eatBar4.png');
+
+    this.load.image('SleepBar1', '/assets/Sprites/sleepBar1.png');
+    this.load.image('SleepBar2', '/assets/Sprites/sleepBar2.png');
+    this.load.image('SleepBar3', '/assets/Sprites/sleepBar3.png');
+    this.load.image('SleepBar4', '/assets/Sprites/sleepBar4.png');
+
+    this.load.image('PlayBar1', '/assets/Sprites/playBar1.png');
+    this.load.image('PlayBar2', '/assets/Sprites/playBar2.png');
+    this.load.image('PlayBar3', '/assets/Sprites/playBar3.png');
+    this.load.image('PlayBar4', '/assets/Sprites/playBar4.png');
 }
 
 function create() {
