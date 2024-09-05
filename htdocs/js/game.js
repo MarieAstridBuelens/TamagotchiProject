@@ -29,6 +29,9 @@ let buttonImageSleep;
 let buttonImagePlay;
 let timeToWait=5000;
 let backgroundMusic;
+let eatSound;
+let playSound;
+let sleepSound;
 let musicOn = false;
 let CerberiusImage;
 let CerberiusImageHunger;
@@ -65,7 +68,11 @@ function preload() {
     this.load.image('beast', '/assets/Sprites/beast.png');
     this.load.image('play', '/assets/Sprites/play.png');
     this.load.image('sleep', '/assets/Sprites/sleep.png');
-    this.load.audio('backgroundMusic', '/assets/Sound/Alexander Ehlers - Flags.mp3')
+    this.load.audio('backgroundMusic', '/assets/Sound/Alexander Ehlers - Flags.mp3');
+    this.load.audio('beastEat', '/assets/Sound/beast_eat.wav');
+    this.load.audio('beastPlay', '/assets/Sound/beast_play.wav');
+    this.load.audio('beastSleep', '/assets/Sound/sleep.wav');
+
 
     this.load.image('emptyBar', '/assets/Sprites/emptyBar.png');
     this.load.image('EatBar1', '/assets/Sprites/eatBar1.png');
@@ -144,6 +151,10 @@ function create() {
 
     backgroundMusic = this.sound.add('backgroundMusic');
     backgroundMusic.loop = true;
+
+    eatSound = this.sound.add('beastEat');
+    playSound = this.sound.add('beastPlay');
+    sleepSound = this.sound.add('beastSleep');
     
 }
 
@@ -178,6 +189,7 @@ function feed() {
     CerberiusImageHunger.alpha = 1;
     CerberiusImagePlay.alpha = 0;
     CerberiusImageSleep.alpha = 0;
+    eatSound.play();
     // envoyer la requête GET vers le serveur
     fetch('http://localhost:8000/hunger') 
     .then(function (response) { 
@@ -198,6 +210,7 @@ function sleep() {
     CerberiusImage.alpha = 0;
     CerberiusImageHunger.alpha = 0;
     CerberiusImagePlay.alpha = 0;
+    sleepSound.play();
     // envoyer la requête GET vers le serveur
     fetch('http://localhost:8000/sleep') 
     .then(function (response) { 
@@ -219,6 +232,7 @@ function play() {
     CerberiusImageHunger.alpha = 0;
     CerberiusImagePlay.alpha = 1;
     CerberiusImageSleep.alpha = 0;
+    playSound.play();
     // envoyer la requête GET vers le serveur
     fetch('http://localhost:8000/mood') 
     .then(function (response) { 
